@@ -10,7 +10,7 @@ export type JsonValue =
   | JsonValue[]
   | { [key: string]: JsonValue };
 
-export async function getJson<T extends JsonValue>(
+export async function getJson<T>(
   key: string,
 ): Promise<T | null> {
   const redis = getRedisClient();
@@ -19,7 +19,7 @@ export async function getJson<T extends JsonValue>(
   return JSON.parse(value) as T;
 }
 
-export async function setJson<T extends JsonValue>(
+export async function setJson<T>(
   key: string,
   value: T,
   options?: { ex?: number },
