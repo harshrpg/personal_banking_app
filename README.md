@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Open Banking Personal Dashboard
 
-## Getting Started
+Production-ready, single-user Open Banking dashboard built with Next.js App Router, Bun, TypeScript, TailwindCSS, and shadcn/ui. Connect up to three bank accounts with GoCardless Bank Account Data and view balances, transactions, and insights.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js App Router + React 19
+- Bun runtime + tooling
+- TailwindCSS v4 + shadcn/ui
+- Vercel KV for persistence
+
+## Local Development (Bun)
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+bun install
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Required Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Set these in `.env.local` (and in Vercel project settings):
 
-## Learn More
+```
+GC_SECRET_ID=your_gocardless_secret_id
+GC_SECRET_KEY=your_gocardless_secret_key
+APP_URL=http://localhost:3000
+APP_API_KEY=your_personal_key
+NEXT_PUBLIC_DEBUG=true
+REDIS_URL=redis://default:password@host:port
+```
 
-To learn more about Next.js, take a look at the following resources:
+Notes:
+- `APP_API_KEY` is used only server-side for internal API protection.
+- `NEXT_PUBLIC_DEBUG` controls the API Health widget (optional).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Vercel Deployment Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. Provision a Redis instance and set `REDIS_URL` in Vercel project settings.
+2. Configure the remaining env vars in Vercel project settings.
+3. Set `APP_URL` to your Vercel deployment URL (e.g., `https://your-app.vercel.app`).
+4. Deploy with the Vercel UI or CLI (`vercel`).
 
-## Deploy on Vercel
+## How to Use
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Visit `/connect` and click **Initialize token** once (creates refresh token).
+2. Choose country (IE/GB), search for your institution, and click **Connect**.
+3. Complete the GoCardless auth flow and return to the app.
+4. Visit `/dashboard` to see balances, transactions, and insights.
+5. Use `/accounts` to rename, resync, or disconnect accounts.
+6. Adjust access settings under `/settings`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Security Notes
+
+- All GoCardless calls are handled in server route handlers only.
+- Routes are protected with `X-APP-KEY` headers on server-to-server requests.
+- Secrets never reach the browser.
