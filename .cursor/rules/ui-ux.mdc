@@ -1,0 +1,80 @@
+---
+description: UI and UX rules for personal finance app
+globs:
+  - app/**/*.tsx
+  - components/**/*.tsx
+alwaysApply: true
+---
+
+Design principles:
+
+- Use clean spacing and strong hierarchy
+- Use shadcn/ui patterns consistently
+- Prefer card-based layout for dashboards
+- Use tabs only when the content groups are clearly related
+- Keep the primary user journey obvious
+- Minimize cognitive load
+- Make financial numbers easy to scan
+- Use typography and spacing as the main visual structure
+
+Layout rules:
+
+- Desktop first for data-heavy dashboards, but fully responsive
+- Mobile should collapse dashboards into meaningful stacked cards
+- Sticky top summary bars are preferred for key metrics
+- Keep page width controlled; avoid stretched content
+- Use grid layouts for metric cards and dashboard modules
+- Tables must support filtering, searching, sorting, and export
+
+Number formatting:
+
+- Always format money clearly
+- Show currency symbol consistently
+- Use positive/negative visual cues consistently
+- Percentages should include comparison basis where relevant
+- Large values should support compact notation only where appropriate
+- Never truncate important financial figures ambiguously
+
+Dashboard rules:
+
+- Each page must have a summary section first
+- Follow with trends
+- Then breakdowns
+- Then detailed tables / history
+- Then AI insights / recommended actions
+
+Charts:
+
+- Avoid decorative charts
+- Every chart must have an analytical purpose
+- Prefer line charts for trends
+- Prefer stacked bars for composition over time
+- Prefer donut/pie only for high-level category distribution
+- Always label time ranges clearly
+- Provide comparison to previous period where useful
+
+Transaction UX:
+
+- Transactions should be easy to scan and edit
+- Merchant, amount, category, and date must stand out
+- Recurring, transfer, subscription, and anomaly states should be visible
+- Editing a category should be frictionless
+- Support bulk actions for categorization
+
+Accessibility:
+
+- Maintain strong contrast
+- Avoid relying on color alone
+- Support keyboard navigation
+- Use semantic HTML
+- Tooltips should explain financial terms when needed
+
+Copywriting:
+
+- Use plain English
+- Avoid accounting jargon unless necessary
+- Explain complex finance concepts in user-friendly language
+- Write concise labels
+- Empty states should guide the next action
+
+The app should look like a premium finance workspace, not a startup demo.

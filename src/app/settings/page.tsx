@@ -44,6 +44,44 @@ export default async function SettingsPage() {
                   defaultValue={settings.accessValidForDays}
                 />
               </label>
+              <label className="space-y-2 text-sm">
+                Budget threshold alert (%)
+                <Input
+                  name="budgetAlertThreshold"
+                  type="number"
+                  defaultValue={settings.budgetAlertThreshold ?? 85}
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                Recurring rule sensitivity (low/medium/high)
+                <Input
+                  name="recurringRuleSensitivity"
+                  defaultValue={settings.recurringRuleSensitivity ?? "medium"}
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                Merchant alias mode (strict/balanced/loose)
+                <Input
+                  name="merchantAliasMode"
+                  defaultValue={settings.merchantAliasMode ?? "balanced"}
+                />
+              </label>
+              <label className="space-y-2 text-sm">
+                AI tone (strict/coach/neutral)
+                <Input name="aiTone" defaultValue={settings.aiTone ?? "neutral"} />
+              </label>
+              <label className="space-y-2 text-sm">
+                Privacy mode (standard/minimal)
+                <Input name="privacyMode" defaultValue={settings.privacyMode ?? "standard"} />
+              </label>
+              <label className="flex items-center gap-2 text-sm md:col-span-2">
+                <input
+                  type="checkbox"
+                  name="notificationsEnabled"
+                  defaultChecked={settings.notificationsEnabled ?? true}
+                />
+                Notifications enabled
+              </label>
               <div className="md:col-span-2">
                 <Button type="submit">Save settings</Button>
               </div>

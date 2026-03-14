@@ -7,12 +7,14 @@ export function InsightsPanel({
   currentMonthSpend,
   lastMonthSpend,
   currency,
+  anomalies = [],
 }: {
   categories: { category: string; value: number }[];
   merchants: { merchant: string; value: number }[];
   currentMonthSpend: number;
   lastMonthSpend: number;
   currency: string;
+  anomalies?: { merchant: string; amount: number; reason: string }[];
 }) {
   const maxCategory = Math.max(...categories.map((item) => item.value), 1);
   const delta =
@@ -26,7 +28,7 @@ export function InsightsPanel({
       <CardHeader>
         <CardTitle className="text-lg">Insights</CardTitle>
       </CardHeader>
-      <CardContent className="grid gap-6 lg:grid-cols-3">
+      <CardContent className="grid gap-6 lg:grid-cols-4">
         <div className="space-y-4">
           <p className="text-sm font-medium">Spend by category</p>
           {categories.length === 0 ? (
@@ -74,8 +76,28 @@ export function InsightsPanel({
             </p>
           </div>
         </div>
+        <div className="space-y-4">
+          <p className="text-sm font-medium">Recent anomalies</p>
+          {anomalies.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No anomalies detected.</p>
+          ) : (
+            <ul className="space-y-3 text-sm text-muted-foreground">
+              {anomalies.map((item) => (
+                <li key={`${item.merchant}-${item.amount}`} className="space-y-1 rounded-xl border border-border/60 p-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="font-medium text-foreground">{item.merchant}</span>
+                    <span className="font-medium">{formatCurrency(item.amount)}</span>
+                  </div>
+                  <p className="text-xs">{item.reason}</p>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </CardContent>
     </Card>
   );
 }
+
+
 

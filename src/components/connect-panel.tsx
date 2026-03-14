@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import type { ApiHealthStatus } from "@/types/app";
 import type { GcInstitution } from "@/types/gocardless";
+import type { WorkspaceMode } from "@/types/app";
 
 type InstitutionMap = {
   ie: GcInstitution[];
@@ -24,11 +25,13 @@ export function ConnectPanel({
   health,
   defaultCountry,
   requiresInit,
+  workspace = "personal",
 }: {
   institutions: InstitutionMap;
   health: ApiHealthStatus;
   defaultCountry: "ie" | "gb";
   requiresInit: boolean;
+  workspace?: WorkspaceMode;
 }) {
   const router = useRouter();
   const [country, setCountry] = useState<"ie" | "gb">(defaultCountry);
@@ -43,6 +46,7 @@ export function ConnectPanel({
     );
   }, [institutions, country, search]);
 
+  const isBusiness = workspace === "business";
   const canConnect =
     !requiresInit &&
     health.tokenStatus !== "missing" &&
@@ -52,7 +56,9 @@ export function ConnectPanel({
     <div className="space-y-6">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-semibold">Connect a bank</h1>
+          <h1 className="text-3xl font-semibold">
+            {isBusiness ? "Connect a business bank" : "Connect a bank"}
+          </h1>
           <p className="text-muted-foreground">
             Choose your institution and complete the secure authorization flow.
           </p>
@@ -89,7 +95,7 @@ export function ConnectPanel({
                     await initializeTokenAction();
                     toast.success("Token initialized");
                     router.refresh();
-                  } catch (error) {
+                  } catch {
                     toast.error("Failed to initialize token");
                   }
                 })
@@ -162,9 +168,9 @@ export function ConnectPanel({
                 onClick={() =>
                   startTransition(async () => {
                     try {
-                      const link = await startConnectionAction(institution.id);
+                      const link = await startConnectionAction(institution.id, workspace);
                       window.location.href = link;
-                    } catch (error) {
+                    } catch {
                       toast.error("Failed to start connection");
                     }
                   })

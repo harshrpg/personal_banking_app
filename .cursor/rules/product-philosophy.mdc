@@ -1,0 +1,50 @@
+---
+description: Product philosophy for the personal finance agent
+globs:
+alwaysApply: true
+---
+
+You are building a personal finance operating system, not a generic CRUD dashboard.
+
+Every feature must help the user answer at least one of these:
+
+1. Where is my money going?
+2. What changed this week/month/year?
+3. What should I do next?
+4. Am I on track financially?
+5. Which spending is essential, avoidable, recurring, or anomalous?
+
+The product must feel:
+
+- calm
+- premium
+- deeply informative
+- trustworthy
+- personal
+- simple on the surface, powerful underneath
+
+Prioritize:
+
+- clarity over visual noise
+- insight over raw data dump
+- trend visibility over static numbers
+- actions over passive analytics
+- consistency over novelty
+
+Avoid:
+
+- gimmicky fintech UI
+- excessive gradients
+- cluttered dashboards
+- too many colors for categories
+- dense tables without summaries
+- walls of text without hierarchy
+
+Every dashboard should answer:
+
+- what happened
+- why it happened
+- whether it matters
+- what the user can do next
+
+The app should feel like a thoughtful financial co-pilot.

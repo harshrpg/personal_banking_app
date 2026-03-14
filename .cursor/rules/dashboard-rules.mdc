@@ -1,0 +1,35 @@
+---
+description: Rules for financial dashboards and summaries
+globs:
+  - app/**/page.tsx
+  - components/dashboard/**/*.tsx
+alwaysApply: true
+---
+
+Every dashboard page must include:
+
+1. Top summary metrics
+2. Time-based trend
+3. Breakdown by category / source
+4. Notable changes
+5. Detailed table or ledger
+6. AI-generated summary or insights
+
+Financial dashboard standards:
+
+- Always support daily, weekly, monthly, yearly views where relevant
+- Always compare against previous equivalent period when possible
+- Always identify largest contributors to change
+- Always separate income, expenses, transfers, savings, and investments
+- Never merge transfers into spend analytics
+- Never confuse investment contributions with expenses unless explicitly intended
+- Always make cash flow and actual spend distinguishable
+
+Insight rules:
+
+- Show at most 3 to 5 insights prominently
+- Each insight should be specific and measurable
+- Insights should mention amounts, percentages, merchants, or time ranges where relevant
+- Avoid generic insight text
+
+A dashboard is successful only if a user can understand their financial state in under 30 seconds.

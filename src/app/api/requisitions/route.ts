@@ -7,6 +7,12 @@ import { requireAppKey } from "@/lib/api-guard";
 import { getRequiredEnv } from "@/lib/env";
 import { createEndUserAgreement, createRequisition } from "@/lib/gocardless";
 import { rateLimit } from "@/lib/rate-limit";
+import type { WorkspaceMode } from "@/types/app";
+
+function parseWorkspace(request: NextRequest): WorkspaceMode {
+  const raw = request.nextUrl.searchParams.get("workspace");
+  return raw === "business" ? "business" : "personal";
+}
 
 export async function POST(request: NextRequest) {
   const auth = requireAppKey(request);
@@ -20,8 +26,9 @@ export async function POST(request: NextRequest) {
     return new Response("institutionId required", { status: 400 });
   }
 
-  const settings = await getSettings();
-  const existingAccounts = await getAccounts();
+  const workspace = parseWorkspace(request);
+  const settings = await getSettings(workspace);
+  const existingAccounts = await getAccounts(workspace);
   if (existingAccounts.length >= settings.maxAccounts) {
     return new Response("Max accounts connected", { status: 400 });
   }
@@ -34,7 +41,9 @@ export async function POST(request: NextRequest) {
   });
 
   const reference = `req_${Date.now()}`;
-  const redirectUrl = `${getRequiredEnv("APP_URL")}/connect/callback?ref=${reference}`;
+  const callbackPath =
+    workspace === "business" ? "/business/connect/callback" : "/connect/callback";
+  const redirectUrl = `${getRequiredEnv("APP_URL")}${callbackPath}?ref=${reference}&workspace=${workspace}`;
   const requisition = await createRequisition({
     institutionId: payload.institutionId,
     agreementId: agreement.id,
@@ -49,7 +58,7 @@ export async function POST(request: NextRequest) {
     createdAt: new Date().toISOString(),
     status: requisition.status,
     accounts: requisition.accounts ?? [],
-  });
+  }, workspace);
 
   return NextResponse.json({
     requisitionId: requisition.id,

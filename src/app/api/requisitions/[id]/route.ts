@@ -18,7 +18,7 @@ import {
 } from "@/lib/gocardless";
 import { requireAppKey } from "@/lib/api-guard";
 import { rateLimit } from "@/lib/rate-limit";
-import type { AccountRecord } from "@/types/app";
+import type { AccountRecord, WorkspaceMode } from "@/types/app";
 
 function parseBalance(
   balances: Awaited<ReturnType<typeof getAccountBalances>>,
@@ -48,14 +48,17 @@ export async function GET(
   }
 
   const { id } = await context.params;
+  const workspaceRaw = request.nextUrl.searchParams.get("workspace");
+  const workspace: WorkspaceMode =
+    workspaceRaw === "business" ? "business" : "personal";
   const requisition = await getRequisition(id);
   await updateRequisition(id, {
     status: requisition.status,
     accounts: requisition.accounts ?? [],
-  });
+  }, workspace);
 
-  const settings = await getSettings();
-  const existingAccounts = await getAccounts();
+  const settings = await getSettings(workspace);
+  const existingAccounts = await getAccounts(workspace);
   const remainingSlots = Math.max(
     0,
     settings.maxAccounts - existingAccounts.length,
@@ -86,13 +89,13 @@ export async function GET(
       selected: true,
     };
 
-    await upsertAccount(account);
+    await upsertAccount(account, workspace);
     const balanceSnapshot = parseBalance(balances);
     if (balanceSnapshot) {
       await setCachedBalances({
         accountId,
         ...balanceSnapshot,
-      });
+      }, workspace);
     }
 
     await setCachedTransactions({
@@ -100,7 +103,7 @@ export async function GET(
       booked: transactions.transactions.booked ?? [],
       pending: transactions.transactions.pending ?? [],
       updatedAt: new Date().toISOString(),
-    });
+    }, workspace);
 
     syncedAccounts.push(account);
   }

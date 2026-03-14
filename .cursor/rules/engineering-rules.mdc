@@ -1,0 +1,79 @@
+---
+description: Engineering rules for Next.js personal finance app
+globs:
+  - app/**/*.ts
+  - app/**/*.tsx
+  - components/**/*.ts
+  - components/**/*.tsx
+  - lib/**/*.ts
+alwaysApply: true
+---
+
+Architecture rules:
+
+- Use Next.js App Router
+- Prefer Server Components by default
+- Use Client Components only for interactivity
+- Keep business logic out of UI components
+- Keep finance calculations in dedicated domain modules
+- Keep AI orchestration isolated from presentation code
+- Keep database access isolated behind repository or service functions
+
+Code organization:
+
+- app/ for routes and screens
+- components/ for reusable UI
+- lib/finance for finance domain logic
+- lib/ai for AI agent orchestration
+- lib/export for CSV/XLSX generation
+- lib/analytics for aggregation logic
+- lib/categorization for merchant and category mapping
+- lib/validation for schemas
+- types/ for domain types
+
+Best practices:
+
+- Use TypeScript strictly
+- Validate all inputs with schemas
+- Create explicit domain types for transaction, category, budget, holding, goal, recurring payment
+- Use deterministic functions for analytics and categorization whenever possible
+- Use AI only where interpretation or summarization adds value
+- Never use AI for core financial math
+- Financial math must be deterministic and testable
+
+Performance:
+
+- Precompute expensive dashboard aggregates
+- Cache derived summaries where sensible
+- Use Redis for lightweight caching and chat/session support
+- Avoid unnecessary client-side fetching
+- Stream AI responses where useful
+- Paginate heavy transaction lists
+
+Reliability:
+
+- Handle missing or partial banking data gracefully
+- Mark uncertain categorizations explicitly
+- Make all financial transformations auditable
+- Keep raw transaction data immutable where possible
+- Log category overrides and rule changes
+
+Security and privacy:
+
+- Treat financial data as highly sensitive
+- Minimize data sent to LLMs
+- Redact unnecessary identifiers
+- Never send full raw financial history to the model when summarization context is enough
+- Prefer structured summaries over raw dumps
+- Keep secrets server-side only
+
+Developer behavior:
+
+- When creating a new feature, also consider:
+  - analytics implications
+  - export implications
+  - AI explanation implications
+  - responsiveness
+  - empty states
+  - loading states
+  - error states
